@@ -10,18 +10,40 @@ public partial class Form1 : Form
 {
     Label canvas;
     Bitmap image;
+    Raytracer r = new Raytracer();
+
 
     public Form1()
     {
         this.Size = new(600, 400);
         canvas = new Label();
-        canvas.Size = this.Size;
-        image = new Bitmap(Size.Width, Size.Height);
+        canvas.Size = this.ClientSize;
+        image = new Bitmap(ClientSize.Width, ClientSize.Height);
 
         this.Controls.Add(canvas);
         canvas.Paint += draw;
 
-        Resize += scale;
+        ClientSizeChanged += scale;
+
+        KeyDown += Control;
+
+    }
+
+    void Control(object o, KeyEventArgs e)
+    {
+        if (e.KeyData == Keys.D || e.KeyData == Keys.Right)
+        {
+            r.cam.pos += new G4(0.5f, 0, 0, 0);
+            this.Invalidate();
+            canvas.Invalidate();
+        }
+
+        if (e.KeyData == Keys.A || e.KeyData == Keys.Left)
+        {
+            r.cam.pos += new G4(-0.5f, 0, 0, 0);
+            this.Invalidate();
+            canvas.Invalidate();
+        }
 
     }
 
@@ -29,8 +51,9 @@ public partial class Form1 : Form
     {
         
         canvas = new Label();
-        canvas.Size = this.Size;
-        image = new Bitmap(Size.Width, Size.Height);
+        canvas.Size = this.ClientSize;
+        image = new Bitmap(ClientSize.Width, ClientSize.Height);
+        this.Invalidate();
     }
 
     void draw(object o, PaintEventArgs ea)
@@ -39,7 +62,7 @@ public partial class Form1 : Form
         {
             for (int x = 0; x < image.Width; x++)
             {
-                image.SetPixel(x, y, Color.Blue);
+                image.SetPixel(x, y, r.pixel(x,y,image.Size));
             }
         }
 

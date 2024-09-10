@@ -1,14 +1,12 @@
-namespace SimpleRaytracer
+namespace SimpleRaytracer;
+internal static class Program
 {
-    internal static class Program
+    /// <summary>
+    ///  The main entry point for the application.
+    /// </summary>
+    [STAThread]
+    static void Main()
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.Run(new Form1());
-        }
+        Application.Run(new Form1());
     }
 }

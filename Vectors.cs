@@ -1,10 +1,7 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
+
 
 namespace SimpleRaytracer;
 /// <summary>
@@ -29,6 +26,9 @@ internal struct G4
         { return new(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, 1); }
     public static G4 operator -(G4 v1, G4 v2)
     { return new(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, 1); }
+    public static G4 operator -(G4 v)
+    { return new(-v.x, -v.y, -v.z, 1); }
+
 
     /// <summary>
     /// dot product
@@ -62,14 +62,14 @@ internal struct G4
         return MathF.Sqrt(Slength(v));
     }
 
-    public static G4 Scale (G4 v, float f)
+    public static G4 operator *(G4 v, float f)
     {
         return new G4(v.x * f, v.y * f, v.z * f, 1);
     }
 
     public static G4 Normalize (G4 v)
     {
-        return Scale(v, InvSqrt(Slength(v)));
+        return v * InvSqrt(Slength(v));
     }
 
     /// <summary>
@@ -213,5 +213,24 @@ internal struct M4
 
 }
 
+/// <summary>
+/// ray with start and direction. direction always needs to be normalized 
+/// </summary>
+internal struct Ray
+{
+    /// <summary>
+    /// ray start
+    /// </summary>
+    public G4 st;
+    /// <summary>
+    /// ray direction
+    /// </summary>
+    public G4 dir;
 
+    public Ray(G4 start, G4 direction)
+    {
+        st = start;
+        dir = direction;
+    }
 
+}
